@@ -1,6 +1,5 @@
 import numpy as np
 
-
 """
 	@moduledoc
 	Holder for the game class.
@@ -14,14 +13,20 @@ import numpy as np
 	One gains a reward of plus 10 for every block that is concatenated and -1 for every move that is required.
 """
 
-class  Game(object):
-	def __init__(self, colorSize, width, height):
-		self.colorSize = colorSize
-		self.width = width
-		self.height = height
-		self.grid = initialise_grid(colorSize, width, height)
-		self.control_grid = initialise_control_grid(width, height)
-		self.score = 0
+def initialise_game(colorSize, width, height):
+	grid =  initialise_grid(colorSize, width, height)
+	control_grid = initialise_control_grid(width, height)
+	score = 0
+	ended = has_game_ended(control_grid)
+	return {'grid' : grid , 'control_grid' : control_grid, 'score' : score, 'ended' : ended}
+
+def update_game(color, state):
+	new_state_tuple = play_color(color, state['grid'], state['control_grid'])
+	return { 'grid' : new_state_tuple[0],
+	'control_grid' : new_state_tuple[1],
+	'score' : state['score'] + new_state_tuple[2],
+	'ended' : has_game_ended(new_state_tuple[1])
+	}
 
 def initialise_grid(colorSize, width, height):
 	grid = np.random.randint(colorSize, size=(width, height), dtype=int)
@@ -53,7 +58,7 @@ def play_color(color, grid, control_grid):
 	r = reward(checked_grid)
 	control_grid = control_grid + checked_grid
 	end = has_game_ended(control_grid)
-	return (grid, control_grid, r, end)
+	return (grid, control_grid, r)
 
 def check_neighbors(grid, control_grid):
 	checked_grid = check_neighbor(grid, control_grid)
@@ -99,3 +104,5 @@ def reward(checked_neighbors):
 			reward += 10
 	reward -= 1
 	return reward
+
+
