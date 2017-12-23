@@ -21,7 +21,21 @@ class TestGame(unittest.TestCase):
 		self.assertFalse(to_test['ended'])
 
 	def test_update_game(self):
-		pass
+		state = {'grid' : np.array([[0,0,2,3], [0,1,3,2], [0,0,2,3]]), 
+		'control_grid' : np.array([[True, True, False, False], [True, False, False, False], [True, True, False, False]]),
+		'score' : 213, 
+		'ended' : False }
+		color = 2
+		to_test  = g.update_game(color, state)
+		expected = {'grid' : np.array([[2,2,2,3], [2,1,3,2], [2,2,2,3]]), 
+		'control_grid' : np.array([[True, True, True, False], [True, False, False, False], [True, True, True, False]]),
+		'score' : 232, 
+		'ended' : False }
+		
+		self.assertTrue((to_test['grid'] == expected['grid']).all())
+		self.assertTrue((to_test['control_grid'] == expected['control_grid']).all())
+		self.assertEqual(to_test['score'], expected['score'])
+		self.assertFalse(to_test['ended'])
 
 	def test_initialise_grid(self):
 		g.np.random.seed(0) # Set a random seed so the randomness is predictable
