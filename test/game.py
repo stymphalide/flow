@@ -11,7 +11,15 @@ import numpy as np
 
 class TestGame(unittest.TestCase):
 	def test_initialise_game(self):
-		pass
+		g.np.random.seed(1)
+		to_test = g.initialise_game(2,2,2)
+		out = {'grid': np.array([[1, 0],[0, 0]]), 'control_grid': np.array([[ True, False], [False, False]], dtype=bool), 'ended': False, 'score': 0}
+
+		self.assertTrue((to_test['grid'] == out['grid']).all())
+		self.assertTrue((to_test['control_grid'] == out['control_grid']).all())
+		self.assertEqual(to_test['score'], out['score'])
+		self.assertFalse(to_test['ended'])
+
 	def test_update_game(self):
 		pass
 
