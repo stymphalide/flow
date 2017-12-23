@@ -21,6 +21,7 @@ class TestGame(unittest.TestCase):
 		self.assertTrue(test.all())
 
 	def test_play_color(self):
+		# Trivial case
 		grid = np.matrix([[0,1], [1,1]])
 		control_grid = np.matrix([[True, False], [False, False]])
 		to_test = g.play_color(1, grid, control_grid)
@@ -28,6 +29,15 @@ class TestGame(unittest.TestCase):
 		self.assertTrue((to_test[0] == np.matrix([[1,1], [1,1]])).all())
 		# Test the command
 		self.assertTrue((to_test[1] == np.matrix([[True, True], [True, True]])).all())
+
+		# More advanced case
+		grid = np.matrix([[0,2], [1,1]])
+		control_grid = np.matrix([[True, False], [False, False]])
+		to_test = g.play_color(1, grid, control_grid)
+		# Test the Colors
+		self.assertTrue((to_test[0] == np.matrix([[1,2], [1,1]])).all())
+		# Test the command
+		self.assertTrue((to_test[1] == np.matrix([[True, False], [True, True]])).all())
 
 	def test_check_neighbors(self):
 		pass # , grid, control_grid
