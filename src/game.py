@@ -59,14 +59,22 @@ def check_neighbor(grid, control_grid):
 		for j in range(shape[1]):
 			if control_grid[i,j]:
 				# Check the neighbours
-				if control_grid[i+1, j]:
+				if i == shape[0] - 1:
 					pass
 				else:
-					if grid[i, j] == grid[i+1, j]:
-						checked_grid[i+1, j] = True
-				if control_grid[i, j+1]:
+					if control_grid[i+1, j]:
+						pass
+					else:
+						if grid[i, j] == grid[i+1, j]:
+							checked_grid[i+1, j] = True
+				if j == shape[1] - 1:
 					pass
 				else:
-					if grid[i, j] == grid[i, j+1]:
-						checked_grid[i, j+1] = True
+					if control_grid[i, j+1]:
+						pass
+					else:
+						if grid[i, j] == grid[i, j+1]:
+							checked_grid[i, j+1] = True
+
+					
 	return checked_grid
