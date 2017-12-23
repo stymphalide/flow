@@ -21,6 +21,7 @@ class  Game(object):
 		self.height = height
 		self.grid = initialise_grid(colorSize, width, height)
 		self.control_grid = initialise_control_grid(width, height)
+		self.score = 0
 
 def initialise_grid(colorSize, width, height):
 	return np.random.randint(colorSize, size=(width, height), dtype=int)
@@ -29,6 +30,16 @@ def initialise_control_grid(width, height):
 	grid = np.zeros(shape=(width, height), dtype=bool)
 	grid[0, 0] = True
 	return grid
+
+
+def reward(checked_neighbors):
+	# Give +10 for every true field and the whole thing minus 1
+	reward = 0
+	for k in np.asarray(checked_neighbors).flatten():
+		if k:
+			reward += 10
+	reward -= 1
+	return reward
 
 def play_color(color, grid, control_grid):
 	if grid.shape != control_grid.shape:
@@ -40,9 +51,9 @@ def play_color(color, grid, control_grid):
 			if control_grid[i, j]:
 				grid[i, j] = color
 	checked_grid = check_neighbors(grid, control_grid)
+	r = reward(checked_grid)
 	control_grid = control_grid + checked_grid
-	return grid, control_grid
-
+	return (grid, control_grid, r)
 
 def check_neighbors(grid, control_grid):
 	checked_grid = check_neighbor(grid, control_grid)
@@ -75,6 +86,9 @@ def check_neighbor(grid, control_grid):
 					else:
 						if grid[i, j] == grid[i, j+1]:
 							checked_grid[i, j+1] = True
-
-					
 	return checked_grid
+
+def has_game_ended(control_grid):
+	control_grid.all()
+
+		

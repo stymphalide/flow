@@ -20,6 +20,9 @@ class TestGame(unittest.TestCase):
 		test = to_test == np.matrix([[True, False], [False, False]])
 		self.assertTrue(test.all())
 
+	def test_reward(self):
+		checked = np.matrix([[False, False, False, False], [True, False, False, False], [True, True, False, False]])
+		self.assertEqual(g.reward(checked), 29)
 	def test_play_color(self):
 		# Trivial case
 		grid = np.matrix([[0,1], [1,1]])
