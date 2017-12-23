@@ -15,7 +15,9 @@ class TestGame(unittest.TestCase):
 		test = g_initialised == g.np.matrix([[4, 5, 0, 3], [3, 3, 1, 3],[5, 2, 4, 6]])
 		self.assertTrue(test.all())
 	def test_initialise_control_grid(self):
-		pass
+		to_test = g.initialise_control_grid(2,2)
+		test = to_test == g.np.matrix([[True, False], [False, False]])
+		self.assertTrue(test.all())
 	def test_play_color(self):
 		pass # , color
 	def test_check_neighbors(self):
