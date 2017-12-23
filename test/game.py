@@ -33,6 +33,7 @@ class TestGame(unittest.TestCase):
 		# Test the command
 		self.assertTrue((to_test[1] == np.matrix([[True, True], [True, True]])).all())
 		self.assertEqual(to_test[2], 29)
+		self.assertTrue(to_test[3])
 		# More advanced case
 		grid = np.matrix([[0,2], [1,1]])
 		control_grid = np.matrix([[True, False], [False, False]])
@@ -42,6 +43,7 @@ class TestGame(unittest.TestCase):
 		# Test the command
 		self.assertTrue((to_test[1] == np.matrix([[True, False], [True, True]])).all())
 		self.assertEqual(to_test[2], 19)
+		self.assertFalse(to_test[3])
 
 	def test_check_neighbors(self):
 		grid = np.matrix([[0,1,2,3,4], [0,0,3,4,5], [1,2,3,4,5]])

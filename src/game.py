@@ -43,7 +43,8 @@ def play_color(color, grid, control_grid):
 	checked_grid = check_neighbors(grid, control_grid)
 	r = reward(checked_grid)
 	control_grid = control_grid + checked_grid
-	return (grid, control_grid, r)
+	end = has_game_ended(control_grid)
+	return (grid, control_grid, r, end)
 
 def check_neighbors(grid, control_grid):
 	checked_grid = check_neighbor(grid, control_grid)
