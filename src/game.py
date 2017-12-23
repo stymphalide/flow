@@ -14,8 +14,6 @@ import numpy as np
 	One gains a reward of plus 10 for every block that is concatenated and -1 for every move that is required.
 """
 
-
-
 class  Game(object):
 	def __init__(self, colorSize, width, height):
 		self.colorSize = colorSize
