@@ -31,16 +31,6 @@ def initialise_control_grid(width, height):
 	grid[0, 0] = True
 	return grid
 
-
-def reward(checked_neighbors):
-	# Give +10 for every true field and the whole thing minus 1
-	reward = 0
-	for k in np.asarray(checked_neighbors).flatten():
-		if k:
-			reward += 10
-	reward -= 1
-	return reward
-
 def play_color(color, grid, control_grid):
 	if grid.shape != control_grid.shape:
 		raise
@@ -89,6 +79,13 @@ def check_neighbor(grid, control_grid):
 	return checked_grid
 
 def has_game_ended(control_grid):
-	control_grid.all()
+	return control_grid.all()
 
-		
+def reward(checked_neighbors):
+	# Give +10 for every true field and the whole thing minus 1
+	reward = 0
+	for k in np.asarray(checked_neighbors).flatten():
+		if k:
+			reward += 10
+	reward -= 1
+	return reward

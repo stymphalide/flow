@@ -32,7 +32,7 @@ class TestGame(unittest.TestCase):
 		self.assertTrue((to_test[0] == np.matrix([[1,1], [1,1]])).all())
 		# Test the command
 		self.assertTrue((to_test[1] == np.matrix([[True, True], [True, True]])).all())
-
+		self.assertEqual(to_test[2], 29)
 		# More advanced case
 		grid = np.matrix([[0,2], [1,1]])
 		control_grid = np.matrix([[True, False], [False, False]])
@@ -41,6 +41,7 @@ class TestGame(unittest.TestCase):
 		self.assertTrue((to_test[0] == np.matrix([[1,2], [1,1]])).all())
 		# Test the command
 		self.assertTrue((to_test[1] == np.matrix([[True, False], [True, True]])).all())
+		self.assertEqual(to_test[2], 19)
 
 	def test_check_neighbors(self):
 		grid = np.matrix([[0,1,2,3,4], [0,0,3,4,5], [1,2,3,4,5]])
@@ -54,6 +55,11 @@ class TestGame(unittest.TestCase):
 		to_test = g.check_neighbor(grid, control_grid)
 		test = to_test == np.matrix([[False, False, False, False, False], [True, False, False, False, False], [False, False, False, False, False]])
 		self.assertTrue(test.all())
+	def test_has_game_ended(self):
+		state = np.matrix([[True, False], [False, True]])
+		self.assertFalse(g.has_game_ended(state))
 
+		state = np.matrix([[True, True, True], [True, True, True]])
+		self.assertTrue(g.has_game_ended(state))
 if __name__ == '__main__':
 	unittest.main()
