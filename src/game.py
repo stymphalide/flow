@@ -24,7 +24,16 @@ class  Game(object):
 		self.score = 0
 
 def initialise_grid(colorSize, width, height):
-	return np.random.randint(colorSize, size=(width, height), dtype=int)
+	grid = np.random.randint(colorSize, size=(width, height), dtype=int)
+	# Check that there are no neighbouring fields with the same color as the input colour-
+	input_color = grid[0,0]
+	if width > 1:
+		if grid[1,0]  == input_color:
+			grid[1,0] = (grid[1,0] + 1) % colorSize
+	if height > 1:
+		if grid[0,1] == input_color:
+			grid[0,1] = (grid[0,1] + 1) % colorSize
+	return grid
 
 def initialise_control_grid(width, height):
 	grid = np.zeros(shape=(width, height), dtype=bool)
