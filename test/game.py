@@ -46,7 +46,11 @@ class TestGame(unittest.TestCase):
 		test = to_test == np.matrix([[False, False, False, False, False], [True, True, False, False, False], [False, False, False, False, False]])
 		self.assertTrue(test.all())
 	def test_check_neighbor(self):
-		pass # , grid, control_grid
+		grid = np.matrix([[0,1,2,3,4], [0,0,3,4,5], [1,2,3,4,5]])
+		control_grid = np.matrix([[True, False, False, False, False], [False, False, False, False, False], [False, False, False, False, False]])
+		to_test = g.check_neighbor(grid, control_grid)
+		test = to_test == np.matrix([[False, False, False, False, False], [True, False, False, False, False], [False, False, False, False, False]])
+		self.assertTrue(test.all())
 
 if __name__ == '__main__':
 	unittest.main()
