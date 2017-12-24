@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (program)
+import Html.Attributes  as A
 import Svg exposing (..)
 import Svg.Attributes exposing(..)
 import Svg.Events exposing (onClick)
@@ -68,11 +69,21 @@ view model =
         Err err ->
             Html.text err
         Ok game ->
-            Html.div [] 
-            [ Html.text <| toString game
-            , svg [width "500", height "700"]
-            <| List.concat [ (viewGrid {x = 0, y = 0} game.grid), viewColors]
-            ]
+            if game.ended then
+                Html.div [A.class "center"] 
+                [ Html.h1 [] [text "Flow"]
+                , Html.h2 [] [text <| toString game.score]
+                , Html.h2 [] [text "You Won!"]
+                , svg [width "500", height "700"]
+                <| List.concat [ (viewGrid {x = 0, y = 0} game.grid)]
+                ]
+            else
+                Html.div [A.class "center"] 
+                [ Html.h1 [] [text "Flow"]
+                , Html.h2 [] [text <| toString game.score]
+                , svg [width "500", height "700"]
+                <| List.concat [ (viewGrid {x = 0, y = 0} game.grid), viewColors]
+                ]
 viewGrid : Position ->  Grid Int -> List (Svg Msg)
 viewGrid pos grid =
     List.concat <| List.map2 (viewRow False) (positions "y" pos) grid
