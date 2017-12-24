@@ -22,10 +22,14 @@ def initialise_game(colorSize, width, height):
 
 def update_game(color, state):
 	new_state_tuple = play_color(color, state['grid'], state['control_grid'])
+	ended = has_game_ended(new_state_tuple[1])
+	score = state['score'] + new_state_tuple[2]
+	if ended:
+		score += 100
 	return { 'grid' : new_state_tuple[0],
 	'control_grid' : new_state_tuple[1],
-	'score' : state['score'] + new_state_tuple[2],
-	'ended' : has_game_ended(new_state_tuple[1])
+	'score' : score,
+	'ended' : ended
 	}
 
 def initialise_grid(colorSize, width, height):
