@@ -4,3 +4,6 @@ src__init__.py
 test/__pycache__
 test/__init__.py
 __init__.py
+
+# Ignore everything elm-related
+elm-stuff/
