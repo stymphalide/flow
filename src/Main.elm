@@ -138,6 +138,37 @@ viewCell isClick pos cell captured =
             , ry "8"
             , fillOpacity "0.7"
             ] []
+                <| List.concat [ (viewGrid {x = 0, y = 0} game.grid), viewColors]
+                ]
+viewGrid : Position ->  Grid Int -> List (Svg Msg)
+viewGrid pos grid =
+    List.concat <| List.map2 (viewRow False) (positions "y" pos) grid
+viewRow : Bool -> Position -> List Int -> List (Svg Msg)
+viewRow isClick pos row =
+    List.map2 (viewCell isClick) (positions "x" pos) row
+viewCell : Bool -> Position -> Int -> Svg Msg
+viewCell isClick pos cell =
+    if isClick then
+        rect 
+        [ fill <| numberToColor cell
+        , pos.x |> toString |> x
+        , pos.y |> toString |> y
+        , width "45"
+        , height "45"
+        , rx "8"
+        , ry "8"
+        , onClick <| Play cell
+        ] []
+    else
+        rect 
+        [ fill <| numberToColor cell
+        , pos.x |> toString |> x
+        , pos.y |> toString |> y
+        , width "45"
+        , height "45"
+        , rx "8"
+        , ry "8"
+        ] []
 numberToColor color =
     case color of
         0 -> "rgb(50,109,173"
