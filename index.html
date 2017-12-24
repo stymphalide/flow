@@ -9130,50 +9130,263 @@ var _elm_lang$websocket$WebSocket$onSelfMsg = F3(
 		}
 	});
 _elm_lang$core$Native_Platform.effectManagers['WebSocket'] = {pkg: 'elm-lang/websocket', init: _elm_lang$websocket$WebSocket$init, onEffects: _elm_lang$websocket$WebSocket$onEffects, onSelfMsg: _elm_lang$websocket$WebSocket$onSelfMsg, tag: 'fx', cmdMap: _elm_lang$websocket$WebSocket$cmdMap, subMap: _elm_lang$websocket$WebSocket$subMap};
-var _user$project$Main$view = function (model) {
-	return A2(
-		_elm_lang$svg$Svg$svg,
-		{
-			ctor: '::',
-			_0: _elm_lang$svg$Svg_Attributes$width('500'),
-			_1: {
+var _user$project$Main$positions = F2(
+	function (axis, pos) {
+		var _p0 = axis;
+		if (_p0 === 'x') {
+			return {
 				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$height('500'),
-				_1: {ctor: '[]'}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$svg$Svg$rect,
-				{
+				_0: pos,
+				_1: {
 					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$x('10'),
+					_0: _elm_lang$core$Native_Utils.update(
+						pos,
+						{x: pos.x + 50}),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$y('10'),
+						_0: _elm_lang$core$Native_Utils.update(
+							pos,
+							{x: pos.x + 100}),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$width('100'),
+							_0: _elm_lang$core$Native_Utils.update(
+								pos,
+								{x: pos.x + 150}),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$height('100'),
+								_0: _elm_lang$core$Native_Utils.update(
+									pos,
+									{x: pos.x + 200}),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$rx('15'),
+									_0: _elm_lang$core$Native_Utils.update(
+										pos,
+										{x: pos.x + 250}),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$ry('15'),
+										_0: _elm_lang$core$Native_Utils.update(
+											pos,
+											{x: pos.x + 300}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$core$Native_Utils.update(
+												pos,
+												{x: pos.x + 350}),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$core$Native_Utils.update(
+													pos,
+													{x: pos.x + 400}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$core$Native_Utils.update(
+														pos,
+														{x: pos.x + 450}),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			};
+		} else {
+			return {
+				ctor: '::',
+				_0: pos,
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Native_Utils.update(
+						pos,
+						{y: pos.y + 50}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Native_Utils.update(
+							pos,
+							{y: pos.y + 100}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Native_Utils.update(
+								pos,
+								{y: pos.y + 150}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Native_Utils.update(
+									pos,
+									{y: pos.y + 200}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Native_Utils.update(
+										pos,
+										{y: pos.y + 250}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$Native_Utils.update(
+											pos,
+											{y: pos.y + 300}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$core$Native_Utils.update(
+												pos,
+												{y: pos.y + 350}),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$core$Native_Utils.update(
+													pos,
+													{y: pos.y + 400}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$core$Native_Utils.update(
+														pos,
+														{y: pos.y + 450}),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			};
+		}
+	});
+var _user$project$Main$numberToColor = function (color) {
+	var _p1 = color;
+	switch (_p1) {
+		case 0:
+			return 'rgb(50,109,173';
+		case 1:
+			return 'rgb(109, 252, 255)';
+		case 2:
+			return 'rgb(255, 252, 109)';
+		case 3:
+			return 'rgb(52, 219, 144)';
+		case 4:
+			return 'rgb(219, 52, 52)';
+		case 5:
+			return 'rgb(224,124,17)';
+		default:
+			return 'rgb(0,0,0)';
+	}
+};
+var _user$project$Main$viewCell = F2(
+	function (pos, cell) {
+		return A2(
+			_elm_lang$svg$Svg$rect,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$fill(
+					_user$project$Main$numberToColor(cell)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$x(
+						_elm_lang$core$Basics$toString(pos.x)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$y(
+							_elm_lang$core$Basics$toString(pos.y)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width('45'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$height('45'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$rx('8'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$ry('8'),
 										_1: {ctor: '[]'}
 									}
 								}
 							}
 						}
 					}
-				},
-				{ctor: '[]'}),
-			_1: {ctor: '[]'}
-		});
+				}
+			},
+			{ctor: '[]'});
+	});
+var _user$project$Main$viewRow = F2(
+	function (pos, row) {
+		return A3(
+			_elm_lang$core$List$map2,
+			_user$project$Main$viewCell,
+			A2(_user$project$Main$positions, 'x', pos),
+			row);
+	});
+var _user$project$Main$viewColors = A2(
+	_user$project$Main$viewRow,
+	{x: 0, y: 650},
+	{
+		ctor: '::',
+		_0: 0,
+		_1: {
+			ctor: '::',
+			_0: 1,
+			_1: {
+				ctor: '::',
+				_0: 2,
+				_1: {
+					ctor: '::',
+					_0: 3,
+					_1: {
+						ctor: '::',
+						_0: 4,
+						_1: {
+							ctor: '::',
+							_0: 5,
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	});
+var _user$project$Main$viewGrid = F2(
+	function (pos, grid) {
+		return _elm_lang$core$List$concat(
+			A3(
+				_elm_lang$core$List$map2,
+				_user$project$Main$viewRow,
+				A2(_user$project$Main$positions, 'y', pos),
+				grid));
+	});
+var _user$project$Main$view = function (model) {
+	var _p2 = model;
+	if (_p2.ctor === 'Err') {
+		return _elm_lang$html$Html$text(_p2._0);
+	} else {
+		return A2(
+			_elm_lang$svg$Svg$svg,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$width('500'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$height('700'),
+					_1: {ctor: '[]'}
+				}
+			},
+			_elm_lang$core$List$concat(
+				{
+					ctor: '::',
+					_0: A2(
+						_user$project$Main$viewGrid,
+						{x: 0, y: 0},
+						_p2._0.grid),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Main$viewColors,
+						_1: {ctor: '[]'}
+					}
+				}));
+	}
 };
 var _user$project$Main$initialGame = {
 	grid: {
@@ -9259,13 +9472,17 @@ var _user$project$Main$gameDecoder = A3(
 				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Main$Game)))));
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'NoOp') {
+		var _p3 = msg;
+		if (_p3.ctor === 'NoOp') {
 			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		} else {
-			var resGame = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Main$gameDecoder, _p0._0);
+			var resGame = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Main$gameDecoder, _p3._0);
 			return {ctor: '_Tuple2', _0: resGame, _1: _elm_lang$core$Platform_Cmd$none};
 		}
+	});
+var _user$project$Main$Position = F2(
+	function (a, b) {
+		return {x: a, y: b};
 	});
 var _user$project$Main$GameState = function (a) {
 	return {ctor: 'GameState', _0: a};
