@@ -14,7 +14,7 @@ def parser(data):
 			game_data = g.update_game(color, state)
 	elif type(data) == str:
 		if data == "start":
-			game_data = g.initialise_game(6, 10,10)
+			game_data = g.initialise_game(6, 10, 10)
 			if game_data['ended']:
 				game_data['ended'] = True
 			else:
