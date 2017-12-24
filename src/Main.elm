@@ -1,10 +1,14 @@
 module Main exposing (..)
 
-import Html exposing (program, text)
+import Html exposing (program)
+import Svg exposing (..)
+import Svg.Attributes exposing(..)
 import WebSocket
 
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
+
+import List
 
 type alias Model =
     Result String Game
@@ -45,8 +49,12 @@ initialGame =
     {grid = [[0, 0], [0,0]], control_grid = [[False, False], [False, False]], score = 0, ended = False}
 
 -- VIEW
+view : Model -> Html.Html Msg
 view model =
-    text <| toString model
+    svg [width "500", height "500"]
+    [rect [ x "10", y "10", width "100", height "100", rx "15", ry "15" ] []  ]
+
+
 
 -- SUBSCRIPTIONS
 subscriptions : Model -> Sub Msg
