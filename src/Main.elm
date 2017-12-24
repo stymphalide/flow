@@ -75,44 +75,69 @@ view model =
                 , Html.h2 [] [text <| toString game.score]
                 , Html.h2 [] [text "You Won!"]
                 , svg [width "500", height "700"]
-                <| List.concat [ (viewGrid {x = 0, y = 0} game.grid)]
+                <| List.concat [ (viewGrid {x = 0, y = 0} game.grid game.control_grid)]
                 ]
             else
                 Html.div [A.class "center"] 
                 [ Html.h1 [] [text "Flow"]
                 , Html.h2 [] [text <| toString game.score]
                 , svg [width "500", height "700"]
-                <| List.concat [ (viewGrid {x = 0, y = 0} game.grid), viewColors]
+                <| List.concat [ (viewGrid {x = 0, y = 0} game.grid game.control_grid), viewColors]
                 ]
-viewGrid : Position ->  Grid Int -> List (Svg Msg)
-viewGrid pos grid =
-    List.concat <| List.map2 (viewRow False) (positions "y" pos) grid
-viewRow : Bool -> Position -> List Int -> List (Svg Msg)
-viewRow isClick pos row =
-    List.map2 (viewCell isClick) (positions "x" pos) row
-viewCell : Bool -> Position -> Int -> Svg Msg
-viewCell isClick pos cell =
+viewGrid : Position ->  Grid Int -> Grid Bool -> List (Svg Msg)
+viewGrid pos grid control_grid =
+    List.concat <| List.map3 (viewRow False) (positions "y" pos) grid control_grid
+viewRow : Bool -> Position -> List Int -> List Bool-> List (Svg Msg)
+viewRow isClick pos row control_row =
+    List.map3 (viewCell isClick) (positions "x" pos) row control_row
+viewCell : Bool -> Position -> Int -> Bool -> Svg Msg
+viewCell isClick pos cell captured =
     if isClick then
-        rect 
-        [ fill <| numberToColor cell
-        , pos.x |> toString |> x
-        , pos.y |> toString |> y
-        , width "45"
-        , height "45"
-        , rx "8"
-        , ry "8"
-        , onClick <| Play cell
-        ] []
+        if captured then
+            rect
+            [ fill <| numberToColor cell
+            , pos.x |> toString |> x
+            , pos.y |> toString |> y
+            , width "45"
+            , height "45"
+            , rx "8"
+            , ry "8"
+            , onClick <| Play cell
+            ] []
+        else
+            rect
+            [ fill <| numberToColor cell
+            , pos.x |> toString |> x
+            , pos.y |> toString |> y
+            , width "45"
+            , height "45"
+            , rx "8"
+            , ry "8"
+            , onClick <| Play cell
+            , fillOpacity "0.7"
+            ] []
     else
-        rect 
-        [ fill <| numberToColor cell
-        , pos.x |> toString |> x
-        , pos.y |> toString |> y
-        , width "45"
-        , height "45"
-        , rx "8"
-        , ry "8"
-        ] []
+        if captured then
+            rect 
+            [ fill <| numberToColor cell
+            , pos.x |> toString |> x
+            , pos.y |> toString |> y
+            , width "45"
+            , height "45"
+            , rx "8"
+            , ry "8"
+            ] []
+        else
+            rect 
+            [ fill <| numberToColor cell
+            , pos.x |> toString |> x
+            , pos.y |> toString |> y
+            , width "45"
+            , height "45"
+            , rx "8"
+            , ry "8"
+            , fillOpacity "0.7"
+            ] []
 numberToColor color =
     case color of
         0 -> "rgb(50,109,173"
@@ -123,7 +148,7 @@ numberToColor color =
         5 -> "rgb(224,124,17)"
         _ -> "rgb(0,0,0)"
 viewColors =
-    viewRow True {x = 0, y = 650} [0,1,2,3,4,5]
+    viewRow True {x = 0, y = 650} [0,1,2,3,4,5] [True, True, True, True, True, True]
 positions : String ->  Position -> List Position
 positions axis pos =
     case axis of
