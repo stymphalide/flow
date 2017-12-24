@@ -3,8 +3,10 @@ module Main exposing (..)
 import Html exposing (program)
 import Svg exposing (..)
 import Svg.Attributes exposing(..)
+import Svg.Events exposing (onClick)
 import WebSocket
 
+import Json.Encode as Encode
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 
@@ -24,6 +26,7 @@ type alias Game =
 type Msg 
     = NoOp
     | GameState String
+    | Play Int
 
 type alias Grid a =
     List (List a)
@@ -42,6 +45,12 @@ update msg model =
                     Decode.decodeString gameDecoder gameString
             in
                 (resGame, Cmd.none)
+        Play color ->
+            case model of
+                Ok game ->
+                    (model, WebSocket.send "ws://localhost:5000" (encodePlay game color ))
+                Err err ->
+                    (model, WebSocket.send "ws://localhost:5000" "\"start\"" )
 
 -- INIT
 init : (Model, Cmd Msg)
@@ -61,21 +70,33 @@ view model =
             <| List.concat [ (viewGrid {x = 0, y = 0} game.grid), viewColors]
 viewGrid : Position ->  Grid Int -> List (Svg Msg)
 viewGrid pos grid =
-    List.concat <| List.map2 viewRow (positions "y" pos) grid
-viewRow : Position -> List Int -> List (Svg Msg)
-viewRow pos row =
-    List.map2 viewCell (positions "x" pos) row
-viewCell : Position -> Int -> Svg Msg
-viewCell pos cell =
-    rect 
-    [ fill <| numberToColor cell
-    , pos.x |> toString |> x
-    , pos.y |> toString |> y
-    , width "45"
-    , height "45"
-    , rx "8"
-    , ry "8" 
-    ] []
+    List.concat <| List.map2 (viewRow False) (positions "y" pos) grid
+viewRow : Bool -> Position -> List Int -> List (Svg Msg)
+viewRow isClick pos row =
+    List.map2 (viewCell isClick) (positions "x" pos) row
+viewCell : Bool -> Position -> Int -> Svg Msg
+viewCell isClick pos cell =
+    if isClick then
+        rect 
+        [ fill <| numberToColor cell
+        , pos.x |> toString |> x
+        , pos.y |> toString |> y
+        , width "45"
+        , height "45"
+        , rx "8"
+        , ry "8"
+        , onClick <| Play cell
+        ] []
+    else
+        rect 
+        [ fill <| numberToColor cell
+        , pos.x |> toString |> x
+        , pos.y |> toString |> y
+        , width "45"
+        , height "45"
+        , rx "8"
+        , ry "8"
+        ] []
 numberToColor color =
     case color of
         0 -> "rgb(50,109,173"
@@ -86,7 +107,7 @@ numberToColor color =
         5 -> "rgb(224,124,17)"
         _ -> "rgb(0,0,0)"
 viewColors =
-    viewRow {x = 0, y = 650} [0,1,2,3,4,5]
+    viewRow True {x = 0, y = 650} [0,1,2,3,4,5]
 positions : String ->  Position -> List Position
 positions axis pos =
     case axis of
@@ -106,8 +127,34 @@ gameDecoder =
     |> required "control_grid"  (Decode.list (Decode.list Decode.bool))
     |> required "score" Decode.int
     |> required "ended" Decode.bool
-
-
+-- Encoder
+encodePlay : Game -> Int -> String
+encodePlay game color =
+    Encode.object
+        [ ("color", Encode.int color)
+        , ("state", encodeGame game)
+        ]
+    |> (Encode.encode 4)
+encodeGame : Game -> Encode.Value
+encodeGame game =
+    Encode.object
+        [ ("grid", encodeIntGrid game.grid)
+        , ("control_grid", encodeBoolGrid game.control_grid)
+        , ("ended", Encode.bool game.ended)
+        , ("score", Encode.int game.score)
+        ]
+encodeIntGrid : List (List Int) -> Encode.Value
+encodeIntGrid grid =
+    List.map encodeIntRow grid |> Encode.list
+encodeIntRow : List Int -> Encode.Value
+encodeIntRow list =
+            List.map Encode.int list |> Encode.list
+encodeBoolGrid : List (List Bool) -> Encode.Value
+encodeBoolGrid grid =
+    List.map encodeBoolRow grid |> Encode.list
+encodeBoolRow : List Bool -> Encode.Value
+encodeBoolRow list =
+            List.map Encode.bool list |> Encode.list
 -- MAIN
 main : Program Never Model Msg
 main =
