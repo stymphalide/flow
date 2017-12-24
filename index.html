@@ -8598,6 +8598,33 @@ var _elm_lang$svg$Svg_Attributes$additive = _elm_lang$virtual_dom$VirtualDom$att
 var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$attribute('accumulate');
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
+var _elm_lang$svg$Svg_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$svg$Svg_Events$simpleOn = F2(
+	function (name, msg) {
+		return A2(
+			_elm_lang$svg$Svg_Events$on,
+			name,
+			_elm_lang$core$Json_Decode$succeed(msg));
+	});
+var _elm_lang$svg$Svg_Events$onBegin = _elm_lang$svg$Svg_Events$simpleOn('begin');
+var _elm_lang$svg$Svg_Events$onEnd = _elm_lang$svg$Svg_Events$simpleOn('end');
+var _elm_lang$svg$Svg_Events$onRepeat = _elm_lang$svg$Svg_Events$simpleOn('repeat');
+var _elm_lang$svg$Svg_Events$onAbort = _elm_lang$svg$Svg_Events$simpleOn('abort');
+var _elm_lang$svg$Svg_Events$onError = _elm_lang$svg$Svg_Events$simpleOn('error');
+var _elm_lang$svg$Svg_Events$onResize = _elm_lang$svg$Svg_Events$simpleOn('resize');
+var _elm_lang$svg$Svg_Events$onScroll = _elm_lang$svg$Svg_Events$simpleOn('scroll');
+var _elm_lang$svg$Svg_Events$onLoad = _elm_lang$svg$Svg_Events$simpleOn('load');
+var _elm_lang$svg$Svg_Events$onUnload = _elm_lang$svg$Svg_Events$simpleOn('unload');
+var _elm_lang$svg$Svg_Events$onZoom = _elm_lang$svg$Svg_Events$simpleOn('zoom');
+var _elm_lang$svg$Svg_Events$onActivate = _elm_lang$svg$Svg_Events$simpleOn('activate');
+var _elm_lang$svg$Svg_Events$onClick = _elm_lang$svg$Svg_Events$simpleOn('click');
+var _elm_lang$svg$Svg_Events$onFocusIn = _elm_lang$svg$Svg_Events$simpleOn('focusin');
+var _elm_lang$svg$Svg_Events$onFocusOut = _elm_lang$svg$Svg_Events$simpleOn('focusout');
+var _elm_lang$svg$Svg_Events$onMouseDown = _elm_lang$svg$Svg_Events$simpleOn('mousedown');
+var _elm_lang$svg$Svg_Events$onMouseMove = _elm_lang$svg$Svg_Events$simpleOn('mousemove');
+var _elm_lang$svg$Svg_Events$onMouseOut = _elm_lang$svg$Svg_Events$simpleOn('mouseout');
+var _elm_lang$svg$Svg_Events$onMouseOver = _elm_lang$svg$Svg_Events$simpleOn('mouseover');
+var _elm_lang$svg$Svg_Events$onMouseUp = _elm_lang$svg$Svg_Events$simpleOn('mouseup');
 var _elm_lang$websocket$Native_WebSocket = function() {
 
 function open(url, settings)
@@ -9130,6 +9157,82 @@ var _elm_lang$websocket$WebSocket$onSelfMsg = F3(
 		}
 	});
 _elm_lang$core$Native_Platform.effectManagers['WebSocket'] = {pkg: 'elm-lang/websocket', init: _elm_lang$websocket$WebSocket$init, onEffects: _elm_lang$websocket$WebSocket$onEffects, onSelfMsg: _elm_lang$websocket$WebSocket$onSelfMsg, tag: 'fx', cmdMap: _elm_lang$websocket$WebSocket$cmdMap, subMap: _elm_lang$websocket$WebSocket$subMap};
+var _user$project$Main$encodeBoolRow = function (list) {
+	return _elm_lang$core$Json_Encode$list(
+		A2(_elm_lang$core$List$map, _elm_lang$core$Json_Encode$bool, list));
+};
+var _user$project$Main$encodeBoolGrid = function (grid) {
+	return _elm_lang$core$Json_Encode$list(
+		A2(_elm_lang$core$List$map, _user$project$Main$encodeBoolRow, grid));
+};
+var _user$project$Main$encodeIntRow = function (list) {
+	return _elm_lang$core$Json_Encode$list(
+		A2(_elm_lang$core$List$map, _elm_lang$core$Json_Encode$int, list));
+};
+var _user$project$Main$encodeIntGrid = function (grid) {
+	return _elm_lang$core$Json_Encode$list(
+		A2(_elm_lang$core$List$map, _user$project$Main$encodeIntRow, grid));
+};
+var _user$project$Main$encodeGame = function (game) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'grid',
+				_1: _user$project$Main$encodeIntGrid(game.grid)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'control_grid',
+					_1: _user$project$Main$encodeBoolGrid(game.control_grid)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'ended',
+						_1: _elm_lang$core$Json_Encode$bool(game.ended)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'score',
+							_1: _elm_lang$core$Json_Encode$int(game.score)
+						},
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$Main$encodePlay = F2(
+	function (game, color) {
+		return A2(
+			_elm_lang$core$Json_Encode$encode,
+			4,
+			_elm_lang$core$Json_Encode$object(
+				{
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'color',
+						_1: _elm_lang$core$Json_Encode$int(color)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'state',
+							_1: _user$project$Main$encodeGame(game)
+						},
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
 var _user$project$Main$positions = F2(
 	function (axis, pos) {
 		var _p0 = axis;
@@ -9274,120 +9377,6 @@ var _user$project$Main$numberToColor = function (color) {
 			return 'rgb(0,0,0)';
 	}
 };
-var _user$project$Main$viewCell = F2(
-	function (pos, cell) {
-		return A2(
-			_elm_lang$svg$Svg$rect,
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$fill(
-					_user$project$Main$numberToColor(cell)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$x(
-						_elm_lang$core$Basics$toString(pos.x)),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$y(
-							_elm_lang$core$Basics$toString(pos.y)),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$width('45'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$height('45'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$rx('8'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$ry('8'),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			{ctor: '[]'});
-	});
-var _user$project$Main$viewRow = F2(
-	function (pos, row) {
-		return A3(
-			_elm_lang$core$List$map2,
-			_user$project$Main$viewCell,
-			A2(_user$project$Main$positions, 'x', pos),
-			row);
-	});
-var _user$project$Main$viewColors = A2(
-	_user$project$Main$viewRow,
-	{x: 0, y: 650},
-	{
-		ctor: '::',
-		_0: 0,
-		_1: {
-			ctor: '::',
-			_0: 1,
-			_1: {
-				ctor: '::',
-				_0: 2,
-				_1: {
-					ctor: '::',
-					_0: 3,
-					_1: {
-						ctor: '::',
-						_0: 4,
-						_1: {
-							ctor: '::',
-							_0: 5,
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			}
-		}
-	});
-var _user$project$Main$viewGrid = F2(
-	function (pos, grid) {
-		return _elm_lang$core$List$concat(
-			A3(
-				_elm_lang$core$List$map2,
-				_user$project$Main$viewRow,
-				A2(_user$project$Main$positions, 'y', pos),
-				grid));
-	});
-var _user$project$Main$view = function (model) {
-	var _p2 = model;
-	if (_p2.ctor === 'Err') {
-		return _elm_lang$html$Html$text(_p2._0);
-	} else {
-		return A2(
-			_elm_lang$svg$Svg$svg,
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$width('500'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$height('700'),
-					_1: {ctor: '[]'}
-				}
-			},
-			_elm_lang$core$List$concat(
-				{
-					ctor: '::',
-					_0: A2(
-						_user$project$Main$viewGrid,
-						{x: 0, y: 0},
-						_p2._0.grid),
-					_1: {
-						ctor: '::',
-						_0: _user$project$Main$viewColors,
-						_1: {ctor: '[]'}
-					}
-				}));
-	}
-};
 var _user$project$Main$initialGame = {
 	grid: {
 		ctor: '::',
@@ -9472,18 +9461,194 @@ var _user$project$Main$gameDecoder = A3(
 				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Main$Game)))));
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p3 = msg;
-		if (_p3.ctor === 'NoOp') {
-			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-		} else {
-			var resGame = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Main$gameDecoder, _p3._0);
-			return {ctor: '_Tuple2', _0: resGame, _1: _elm_lang$core$Platform_Cmd$none};
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'GameState':
+				var resGame = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Main$gameDecoder, _p2._0);
+				return {ctor: '_Tuple2', _0: resGame, _1: _elm_lang$core$Platform_Cmd$none};
+			default:
+				var _p3 = model;
+				if (_p3.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: model,
+						_1: A2(
+							_elm_lang$websocket$WebSocket$send,
+							'ws://localhost:5000',
+							A2(_user$project$Main$encodePlay, _p3._0, _p2._0))
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: model,
+						_1: A2(_elm_lang$websocket$WebSocket$send, 'ws://localhost:5000', '\"start\"')
+					};
+				}
 		}
 	});
 var _user$project$Main$Position = F2(
 	function (a, b) {
 		return {x: a, y: b};
 	});
+var _user$project$Main$Play = function (a) {
+	return {ctor: 'Play', _0: a};
+};
+var _user$project$Main$viewCell = F3(
+	function (isClick, pos, cell) {
+		return isClick ? A2(
+			_elm_lang$svg$Svg$rect,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$fill(
+					_user$project$Main$numberToColor(cell)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$x(
+						_elm_lang$core$Basics$toString(pos.x)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$y(
+							_elm_lang$core$Basics$toString(pos.y)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width('45'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$height('45'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$rx('8'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$ry('8'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Events$onClick(
+												_user$project$Main$Play(cell)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{ctor: '[]'}) : A2(
+			_elm_lang$svg$Svg$rect,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$fill(
+					_user$project$Main$numberToColor(cell)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$x(
+						_elm_lang$core$Basics$toString(pos.x)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$y(
+							_elm_lang$core$Basics$toString(pos.y)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width('45'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$height('45'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$rx('8'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$ry('8'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{ctor: '[]'});
+	});
+var _user$project$Main$viewRow = F3(
+	function (isClick, pos, row) {
+		return A3(
+			_elm_lang$core$List$map2,
+			_user$project$Main$viewCell(isClick),
+			A2(_user$project$Main$positions, 'x', pos),
+			row);
+	});
+var _user$project$Main$viewGrid = F2(
+	function (pos, grid) {
+		return _elm_lang$core$List$concat(
+			A3(
+				_elm_lang$core$List$map2,
+				_user$project$Main$viewRow(false),
+				A2(_user$project$Main$positions, 'y', pos),
+				grid));
+	});
+var _user$project$Main$viewColors = A3(
+	_user$project$Main$viewRow,
+	true,
+	{x: 0, y: 650},
+	{
+		ctor: '::',
+		_0: 0,
+		_1: {
+			ctor: '::',
+			_0: 1,
+			_1: {
+				ctor: '::',
+				_0: 2,
+				_1: {
+					ctor: '::',
+					_0: 3,
+					_1: {
+						ctor: '::',
+						_0: 4,
+						_1: {
+							ctor: '::',
+							_0: 5,
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	});
+var _user$project$Main$view = function (model) {
+	var _p4 = model;
+	if (_p4.ctor === 'Err') {
+		return _elm_lang$html$Html$text(_p4._0);
+	} else {
+		return A2(
+			_elm_lang$svg$Svg$svg,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$width('500'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$height('700'),
+					_1: {ctor: '[]'}
+				}
+			},
+			_elm_lang$core$List$concat(
+				{
+					ctor: '::',
+					_0: A2(
+						_user$project$Main$viewGrid,
+						{x: 0, y: 0},
+						_p4._0.grid),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Main$viewColors,
+						_1: {ctor: '[]'}
+					}
+				}));
+	}
+};
 var _user$project$Main$GameState = function (a) {
 	return {ctor: 'GameState', _0: a};
 };
