@@ -9213,7 +9213,7 @@ var _user$project$Main$encodePlay = F2(
 	function (game, color) {
 		return A2(
 			_elm_lang$core$Json_Encode$encode,
-			4,
+			0,
 			_elm_lang$core$Json_Encode$object(
 				{
 					ctor: '::',
@@ -9377,64 +9377,17 @@ var _user$project$Main$numberToColor = function (color) {
 			return 'rgb(0,0,0)';
 	}
 };
-var _user$project$Main$initialGame = {
-	grid: {
-		ctor: '::',
-		_0: {
-			ctor: '::',
-			_0: 0,
-			_1: {
-				ctor: '::',
-				_0: 0,
-				_1: {ctor: '[]'}
-			}
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '::',
-				_0: 0,
-				_1: {
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				}
-			},
-			_1: {ctor: '[]'}
-		}
-	},
-	control_grid: {
-		ctor: '::',
-		_0: {
-			ctor: '::',
-			_0: false,
-			_1: {
-				ctor: '::',
-				_0: false,
-				_1: {ctor: '[]'}
-			}
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '::',
-				_0: false,
-				_1: {
-					ctor: '::',
-					_0: false,
-					_1: {ctor: '[]'}
-				}
-			},
-			_1: {ctor: '[]'}
-		}
-	},
-	score: 0,
-	ended: false
-};
+var _user$project$Main$serverUrl = 'ws://localhost:5000';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
-	_0: _elm_lang$core$Result$Ok(_user$project$Main$initialGame),
-	_1: _elm_lang$core$Platform_Cmd$none
+	_0: _elm_lang$core$Result$Err('start'),
+	_1: A2(
+		_elm_lang$websocket$WebSocket$send,
+		_user$project$Main$serverUrl,
+		A2(
+			_elm_lang$core$Json_Encode$encode,
+			0,
+			_elm_lang$core$Json_Encode$string('start')))
 };
 var _user$project$Main$Game = F4(
 	function (a, b, c, d) {
@@ -9476,15 +9429,11 @@ var _user$project$Main$update = F2(
 						_0: model,
 						_1: A2(
 							_elm_lang$websocket$WebSocket$send,
-							'ws://localhost:5000',
+							_user$project$Main$serverUrl,
 							A2(_user$project$Main$encodePlay, _p3._0, _p2._0))
 					};
 				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: model,
-						_1: A2(_elm_lang$websocket$WebSocket$send, 'ws://localhost:5000', '\"start\"')
-					};
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 		}
 	});
@@ -9623,37 +9572,50 @@ var _user$project$Main$view = function (model) {
 	if (_p4.ctor === 'Err') {
 		return _elm_lang$html$Html$text(_p4._0);
 	} else {
+		var _p5 = _p4._0;
 		return A2(
-			_elm_lang$svg$Svg$svg,
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
 			{
 				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$width('500'),
+				_0: _elm_lang$html$Html$text(
+					_elm_lang$core$Basics$toString(_p5)),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$height('700'),
+					_0: A2(
+						_elm_lang$svg$Svg$svg,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width('500'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$height('700'),
+								_1: {ctor: '[]'}
+							}
+						},
+						_elm_lang$core$List$concat(
+							{
+								ctor: '::',
+								_0: A2(
+									_user$project$Main$viewGrid,
+									{x: 0, y: 0},
+									_p5.grid),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Main$viewColors,
+									_1: {ctor: '[]'}
+								}
+							})),
 					_1: {ctor: '[]'}
 				}
-			},
-			_elm_lang$core$List$concat(
-				{
-					ctor: '::',
-					_0: A2(
-						_user$project$Main$viewGrid,
-						{x: 0, y: 0},
-						_p4._0.grid),
-					_1: {
-						ctor: '::',
-						_0: _user$project$Main$viewColors,
-						_1: {ctor: '[]'}
-					}
-				}));
+			});
 	}
 };
 var _user$project$Main$GameState = function (a) {
 	return {ctor: 'GameState', _0: a};
 };
 var _user$project$Main$subscriptions = function (model) {
-	return A2(_elm_lang$websocket$WebSocket$listen, 'ws://localhost:5000/', _user$project$Main$GameState);
+	return A2(_elm_lang$websocket$WebSocket$listen, _user$project$Main$serverUrl, _user$project$Main$GameState);
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();

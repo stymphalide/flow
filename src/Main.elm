@@ -33,6 +33,10 @@ type alias Grid a =
 type alias Position= 
     {x : Int, y : Int}
 
+serverUrl =
+    "ws://localhost:5000"
+
+
 -- UPDATE
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -48,16 +52,14 @@ update msg model =
         Play color ->
             case model of
                 Ok game ->
-                    (model, WebSocket.send "ws://localhost:5000" (encodePlay game color ))
+                    (model, WebSocket.send serverUrl (encodePlay game color ))
                 Err err ->
-                    (model, WebSocket.send "ws://localhost:5000" "\"start\"" )
+                    (model, Cmd.none)
 
 -- INIT
 init : (Model, Cmd Msg)
 init =
-    (Ok initialGame, Cmd.none)
-initialGame =
-    {grid = [[0, 0], [0,0]], control_grid = [[False, False], [False, False]], score = 0, ended = False}
+    (Err "start", WebSocket.send serverUrl (Encode.encode 0 (Encode.string "start")))
 
 -- VIEW
 view : Model -> Html.Html Msg
@@ -66,8 +68,11 @@ view model =
         Err err ->
             Html.text err
         Ok game ->
-            svg [width "500", height "700"]
+            Html.div [] 
+            [ Html.text <| toString game
+            , svg [width "500", height "700"]
             <| List.concat [ (viewGrid {x = 0, y = 0} game.grid), viewColors]
+            ]
 viewGrid : Position ->  Grid Int -> List (Svg Msg)
 viewGrid pos grid =
     List.concat <| List.map2 (viewRow False) (positions "y" pos) grid
@@ -118,7 +123,7 @@ positions axis pos =
 -- SUBSCRIPTIONS
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    WebSocket.listen "ws://localhost:5000/" GameState
+    WebSocket.listen serverUrl GameState
 -- Decoder
 gameDecoder : Decode.Decoder Game
 gameDecoder =
@@ -134,7 +139,7 @@ encodePlay game color =
         [ ("color", Encode.int color)
         , ("state", encodeGame game)
         ]
-    |> (Encode.encode 4)
+    |> (Encode.encode 0)
 encodeGame : Game -> Encode.Value
 encodeGame game =
     Encode.object
