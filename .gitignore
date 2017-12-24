@@ -7,3 +7,5 @@ __init__.py
 
 # Ignore everything elm-related
 elm-stuff/
+# Event the compiled index.html file
+index.html
