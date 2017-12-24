@@ -87,6 +87,14 @@ def check_neighbor(grid, control_grid):
 					else:
 						if grid[i, j] == grid[i+1, j]:
 							checked_grid[i+1, j] = True
+				if i == 0:
+					pass
+				else:
+					if control_grid[i-1, j]:
+						pass
+					else:
+						if grid[i, j] == grid[i-1, j]:
+							checked_grid[i-1, j] = True
 				if j == shape[1] - 1:
 					pass
 				else:
@@ -95,6 +103,14 @@ def check_neighbor(grid, control_grid):
 					else:
 						if grid[i, j] == grid[i, j+1]:
 							checked_grid[i, j+1] = True
+				if j == 0:
+					pass
+				else:
+					if control_grid[i, j-1]:
+						pass
+					else:
+						if grid[i, j] == grid[i, j-1]:
+							checked_grid[i, j-1] = True
 	return checked_grid
 
 def has_game_ended(control_grid):
